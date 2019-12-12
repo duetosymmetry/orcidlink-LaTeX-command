@@ -17,3 +17,13 @@ When you want to insert the hyperlinked ORCiD logo, use `\orcidlink{0000-0000-00
 ```
 This will appear as a clickable hyperlink, and will look like this:
 ![Author LaTeX render preview image](preview.png)
+
+Dependancies
+------------
+
+This package relies on the following packages:
+- [hyperref](https://www.ctan.org/pkg/hyperref)
+- [scalerel](https://www.ctan.org/pkg/scalerel)
+- [tikz](https://www.ctan.org/pkg/pgf)
+
+All of these packages are included in the popular [TeX Live](https://www.tug.org/texlive/) distribution, so most users should not have to install anything new.
