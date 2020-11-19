@@ -26,21 +26,21 @@
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
 %<package>\ProvidesPackage{orcidlink}
 %<*package>
-    [2019/12/12 1.0.0 Linked ORCiD logo macro package]
+    [2020/11/19 v1.0.0 Linked ORCiD logo macro package]
 %</package>
 %
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{orcidlink}[2019/12/12]
+\usepackage{orcidlink}[2020/11/19]
 \hypersetup{colorlinks,urlcolor=NavyBlue,citecolor=NavyBlue,linkcolor=NavyBlue,pdfusetitle}
+\usepackage{graphicx}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
 \begin{document}
   \DocInput{orcidlink.dtx}
   \PrintChanges
-  \PrintIndex
 \end{document}
 %</driver>
 % \fi
@@ -64,29 +64,48 @@
 %   Right brace   \}     Tilde         \~}
 %
 %
-% \changes{1.0.0}{2019/12/12}{Converted to DTX file}
+% \changes{v1.0.0}{2020/11/19}{Converted to DTX file}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
 % \GetFileInfo{orcidlink.dtx}
 % \title{The \textsf{orcidlink} package}
-% \author{Leo C. Stein \orcidlink{0000-0001-7559-9597} \\ \href{mailto:leo.stein@gmail.com}{leo.stein@gmail.com}}
+% \author{Leo C.\ Stein\,\orcidlink{0000-0001-7559-9597} \\ \href{mailto:leo.stein@gmail.com}{leo.stein@gmail.com}}
 % \date{\fileversion~from \filedate}
 %
 % \maketitle
 %
 % \section{Introduction}
 %
-% Put text here.
+% This is a LaTeX style file to add a macro for inserting a linked
+% ORCiD logo.  The package provides exactly one command, |\orcidlink|.
 %
 % \section{Usage}
 %
-% Put text here.
-%
-%
+% To use this package, in the preamble include
+%    \begin{macrocode}
+\usepackage{orcidlink}
+%    \end{macrocode}
 % \DescribeMacro{\orcidlink}
+% Insert the ORCiD logo (\orcidlink{}), which is hyperlinked to the URL
+% of the researcher whose iD was specified.  Usage: 
 %
-
+|\orcidlink| \marg{orcid}\newline
+% Replace the mandatory argument \meta{orcid} with your
+% ORCiD --- just the digits, not your whole URL.
+% For example, the command
+% |\orcidlink{0000-0001-7559-9597}| will hyperlink to the URL
+% \url{https://orcid.org/0000-0001-7559-9597}.
+% This is most common in
+% the author list.  For example, in the preamble of a RevTeX article,
+% if you write
+%    \begin{macrocode}
+\author{Emmy Noether\,\orcidlink{0000-0000-0000-0000}}
+%    \end{macrocode}
+% then the article byline will look something like this:
+%
+% \includegraphics[width=0.5\textwidth]{preview}\newline{}
+% The macro is used in the author line of this documentation as well.
 %
 % \StopEventually{}
 %
