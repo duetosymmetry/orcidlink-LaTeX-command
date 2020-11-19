@@ -3,10 +3,22 @@ LaTeX style file to add a macro for inserting a linked ORCiD logo
 
 This LaTeX style file just defines a single macro, `\orcidlink`.  The code is from [this TeX.SE answer](https://tex.stackexchange.com/a/445583/34063).  My only contribution was wrapping it into a style file.
 
+Installation
+------------
+
+If `orcidlink` is already provided in your TeX distribution, skip this
+section.  You should be able to install `orcidlink` from the CTAN via
+your distribution's utility (e.g. the TeX Live Utility).
+Alternatively, you can get the package from the [source repository on
+GitHub](https://github.com/duetosymmetry/orcidlink-LaTeX-command).  If
+you do not want to do a "full" installation, just copy
+[orcidlink.sty](orcidlink.sty) into the same directory as your LaTeX
+source.
+
 Usage
 -----
 
-Just copy [orcidlink.sty](orcidlink.sty) into the same directory as your LaTeX source.  Then in your preamble, add:
+In your preamble, add:
 ```latex
 \usepackage{orcidlink}
 ```
@@ -27,3 +39,13 @@ This package relies on the following packages:
 - [tikz](https://www.ctan.org/pkg/pgf)
 
 All of these packages are included in the popular [TeX Live](https://www.tug.org/texlive/) distribution, so most users should not have to install anything new.
+
+Credits
+-------
+
+The original TikZ icon code was created by user [Milo on
+TeX.SE](https://tex.stackexchange.com/users/128068/milo).
+This package was created and is maintained by [Leo
+C. Stein](http://duetosymmetry.com/), (c) 2019.
+This material is subject to the [LaTeX Project Public License
+1.3c](https://www.ctan.org/license/lppl1.3).
