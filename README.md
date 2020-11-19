@@ -16,7 +16,7 @@ When you want to insert the hyperlinked ORCiD logo, use `\orcidlink{0000-0000-00
 ...
 ```
 This will appear as a clickable hyperlink, and will look like this:
-![Author LaTeX render preview image](preview.png)
+![Author LaTeX render preview image](https://raw.githubusercontent.com/duetosymmetry/orcidlink-LaTeX-command/f03c85cd9fe3e40bec5f51b1319b0e9ab30c2e09/preview.png)
 
 Dependancies
 ------------
