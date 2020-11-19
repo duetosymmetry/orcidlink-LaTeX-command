@@ -31,7 +31,9 @@
 %
 %<*driver>
 \documentclass{ltxdoc}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{orcidlink}[2019/12/12]
+\hypersetup{colorlinks,urlcolor=NavyBlue,citecolor=NavyBlue,linkcolor=NavyBlue,pdfusetitle}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -66,10 +68,9 @@
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
-% \providecommand*{\url}{\texttt}
 % \GetFileInfo{orcidlink.dtx}
 % \title{The \textsf{orcidlink} package}
-% \author{Leo C. Stein \\ \url{leo.stein@gmail.com}}
+% \author{Leo C. Stein \orcidlink{0000-0001-7559-9597} \\ \href{mailto:leo.stein@gmail.com}{leo.stein@gmail.com}}
 % \date{\fileversion~from \filedate}
 %
 % \maketitle
