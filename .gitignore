@@ -274,3 +274,8 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+## LCS Added
+orcidlink.ps
+orcidlink.pdf
+run_sty2dtx.sh
