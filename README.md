@@ -7,7 +7,7 @@ Installation
 ------------
 
 If `orcidlink` is already provided in your TeX distribution, skip this
-section.  You should be able to install `orcidlink` from the CTAN via
+section.  You should be able to install `orcidlink` [from the CTAN](https://www.ctan.org/pkg/orcidlink) via
 your distribution's utility (e.g. the TeX Live Utility).
 Alternatively, you can get the package from the [source repository on
 GitHub](https://github.com/duetosymmetry/orcidlink-LaTeX-command).  If
