@@ -23,16 +23,11 @@
 %<*driver>
 \ProvidesFile{orcidlink.dtx}
 %</driver>
-%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
-%<package>\ProvidesPackage{orcidlink}
-%<*package>
-    [2020/11/19 v1.0.0 Linked ORCiD logo macro package]
-%</package>
 %
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{orcidlink}[2020/11/19]
+\usepackage{orcidlink}[2020/11/21]
 \hypersetup{colorlinks,urlcolor=NavyBlue,citecolor=NavyBlue,linkcolor=NavyBlue,pdfusetitle}
 \usepackage{graphicx}
 \EnableCrossrefs
@@ -45,7 +40,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{21}
+% \CheckSum{22}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -65,6 +60,7 @@
 %
 %
 % \changes{v1.0.0}{2020/11/19}{Converted to DTX file}
+% \changes{v1.0.1}{2020/11/21}{Bugfix due to misunderstanding of docstrip}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
@@ -87,13 +83,14 @@
 %
 % To use this package, in the preamble include
 %    \begin{macrocode}
-\usepackage{orcidlink}
+%    \usepackage{orcidlink}
 %    \end{macrocode}
+%
 % \DescribeMacro{\orcidlink}
 % Insert the ORCiD logo (\orcidlink{}), which is hyperlinked to the URL
 % of the researcher whose iD was specified.  Usage: 
 %
-|\orcidlink| \marg{orcid}\newline
+% |\orcidlink| \marg{orcid}\newline
 % Replace the mandatory argument \meta{orcid} with your
 % ORCiD --- just the digits, not your whole URL.
 % For example, the command
@@ -103,7 +100,7 @@
 % the author list.  For example, in the preamble of a RevTeX article,
 % if you write
 %    \begin{macrocode}
-\author{Emmy Noether\,\orcidlink{0000-0000-0000-0000}}
+%    \author{Emmy Noether\,\orcidlink{0000-0000-0000-0000}}
 %    \end{macrocode}
 % then the article byline will look something like this:
 %
@@ -120,16 +117,19 @@
 %
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\ProvidesPackage{orcidlink}[2019/12/12 Linked ORCiD logo macro package]
-%    \end{macrocode}
-% All I did was package up Milo's code on TeX.SE,
-% see https://tex.stackexchange.com/a/445583/34063
-%    \begin{macrocode}
+\ProvidesPackage{orcidlink}
+    [2020/11/21 v1.0.2 Linked ORCiD logo macro package]
+
+%% All I did was package up Milo's code on TeX.SE,
+%% see https://tex.stackexchange.com/a/445583/34063
 \RequirePackage{hyperref}
 \RequirePackage{scalerel}
 \RequirePackage{tikz}
+
 \ProcessOptions\relax
+
 \usetikzlibrary{svg.path}
+
 \definecolor{orcidlogocol}{HTML}{A6CE39}
 \tikzset{
   orcidlogo/.pic={
@@ -143,11 +143,13 @@
 %
 % \begin{macro}{\orcidlink}
 %    \begin{macrocode}
-\newcommand\orcidlink[1]{\href{https://orcid.org/#1}{\mbox{\scalerel*{
+
+\newcommand\orcidlink[1]{\texorpdfstring{\href{https://orcid.org/#1}{\mbox{\scalerel*{
 \begin{tikzpicture}[yscale=-1,transform shape]
 \pic{orcidlogo};
 \end{tikzpicture}
-}{|}}}}
+}{|}}}}{}}
+
 \endinput
 %    \end{macrocode}
 % \end{macro}
