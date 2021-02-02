@@ -20,12 +20,11 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
-    [2020/11/21 v1.0.2 Linked ORCiD logo macro package]
+    [2021/03/15 v1.0.3 Linked ORCiD logo macro package]
 
 %% All I did was package up Milo's code on TeX.SE,
 %% see https://tex.stackexchange.com/a/445583/34063
 \RequirePackage{hyperref}
-\RequirePackage{scalerel}
 \RequirePackage{tikz}
 
 \ProcessOptions\relax
@@ -42,11 +41,22 @@
   }
 }
 
-\newcommand\orcidlink[1]{\texorpdfstring{\href{https://orcid.org/#1}{\mbox{\scalerel*{
-\begin{tikzpicture}[yscale=-1,transform shape]
+%% Reciprocal of the height of the svg whose source is above.  The
+%% original generates a 256pt high graphic; this macro holds 1/256.
+\newcommand{\@OrigHeightRecip}{0.00390625}
+
+%% We will compute the current X height to make the logo the right height
+\newlength{\@curXheight}
+
+\DeclareRobustCommand\orcidlink[1]{%
+\texorpdfstring{%
+\setlength{\@curXheight}{\fontcharht\font`X}%
+\href{https://orcid.org/#1}{\mbox{%
+\begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
+xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
-\end{tikzpicture}
-}{|}}}}{}}
+\end{tikzpicture}%
+}}}{}}
 
 \endinput
 %%
