@@ -27,7 +27,7 @@
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{orcidlink}[2020/11/21]
+\usepackage{orcidlink}[2021/03/15]
 \hypersetup{colorlinks,urlcolor=NavyBlue,citecolor=NavyBlue,linkcolor=NavyBlue,pdfusetitle}
 \usepackage{graphicx}
 \EnableCrossrefs
@@ -40,7 +40,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{22}
+% \CheckSum{32}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -63,6 +63,8 @@
 % \changes{v1.0.1}{2020/11/21}{Bugfix due to misunderstanding of docstrip}
 % \changes{v1.0.2}{2020/11/21}{Fix fragility of command when inside of
 % author, and combined with hyperref's option pdfusetitle}
+% \changes{v1.0.3}{2021/03/15}{Improve fragility by calculating
+% scaling ourselves, and using DeclareRobustCommand}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
@@ -120,12 +122,11 @@
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
-    [2020/11/21 v1.0.2 Linked ORCiD logo macro package]
+    [2021/03/15 v1.0.3 Linked ORCiD logo macro package]
 
 %% All I did was package up Milo's code on TeX.SE,
 %% see https://tex.stackexchange.com/a/445583/34063
 \RequirePackage{hyperref}
-\RequirePackage{scalerel}
 \RequirePackage{tikz}
 
 \ProcessOptions\relax
@@ -141,16 +142,27 @@
                  svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
   }
 }
+
+%% Reciprocal of the height of the svg whose source is above.  The
+%% original generates a 256pt high graphic; this macro holds 1/256.
+\newcommand{\@OrigHeightRecip}{0.00390625}
+
+%% We will compute the current X height to make the logo the right height
+\newlength{\@curXheight}
+
 %    \end{macrocode}
 %
 % \begin{macro}{\orcidlink}
 %    \begin{macrocode}
-
-\newcommand\orcidlink[1]{\texorpdfstring{\href{https://orcid.org/#1}{\mbox{\scalerel*{
-\begin{tikzpicture}[yscale=-1,transform shape]
+\DeclareRobustCommand\orcidlink[1]{%
+\texorpdfstring{%
+\setlength{\@curXheight}{\fontcharht\font`X}%
+\href{https://orcid.org/#1}{\mbox{%
+\begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
+xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
-\end{tikzpicture}
-}{|}}}}{}}
+\end{tikzpicture}%
+}}}{}}
 
 \endinput
 %    \end{macrocode}
