@@ -20,7 +20,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
-    [2021/03/15 v1.0.3 Linked ORCiD logo macro package]
+    [2021/06/11 v1.0.4 Linked ORCiD logo macro package]
 
 %% All I did was package up Milo's code on TeX.SE,
 %% see https://tex.stackexchange.com/a/445583/34063
@@ -51,12 +51,12 @@
 \DeclareRobustCommand\orcidlink[1]{%
 \texorpdfstring{%
 \setlength{\@curXheight}{\fontcharht\font`X}%
-\href{https://orcid.org/#1}{\mbox{%
+\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
 \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
 xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
 \end{tikzpicture}%
-}}}{}}
+}}}}{}}
 
 \endinput
 %%
