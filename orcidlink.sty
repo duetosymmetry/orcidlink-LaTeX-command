@@ -5,9 +5,9 @@
 %% The original source files were:
 %%
 %% orcidlink.dtx  (with options: `package')
-%% 
+%%
 %% This is a generated file.
-%% 
+%%
 %% Copyright (C) 2020 by Leo C. Stein <leo.stein@gmail.com>
 %% --------------------------------------------------------------------------
 %% This work may be distributed and/or modified under the
@@ -17,7 +17,7 @@
 %%   http://www.latex-project.org/lppl.txt
 %% and version 1.3 or later is part of all distributions of LaTeX
 %% version 2005/12/01 or later.
-%% 
+%%
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
     [2021/06/11 v1.0.4 Linked ORCiD logo macro package]
@@ -45,16 +45,43 @@
 %% original generates a 256pt high graphic; this macro holds 1/256.
 \newcommand{\@OrigHeightRecip}{0.00390625}
 
-%% We will compute the current X height to make the logo the right height
-\newlength{\@curXheight}
+%% Reciprocal of the height of D within the svg above.
+%% The original D spans from 79.1pt to 186.2pt; this macro holds 1/107.1.
+\newcommand{\@OrigInnerHeightRecip}{0.009337068160597572}
 
-\DeclareRobustCommand\orcidlink[1]{%
+\newlength{\@curXheight}
+\newlength{\@curXdepth}
+
+%% Scale and center the logo around the given glyph
+\DeclareRobustCommand\@orcidlink[2]{%
 \texorpdfstring{%
-\setlength{\@curXheight}{\fontcharht\font`X}%
-\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
+\setlength{\@curXheight}{\fontcharht\font`#1}%
+\setlength{\@curXdepth}{\fontchardp\font`#1}%
+\addtolength{\@curXheight}{\@curXdepth}%
+\href{https://orcid.org/#2}{\XeTeXLinkBox{\mbox{%
 \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
+baseline=-\@curXheight+\@curXdepth,
 xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
+\end{tikzpicture}%
+}}}}{}}
+
+\DeclareRobustCommand\orcidlinks[1]{\@orcidlink{X}{#1}}
+\DeclareRobustCommand\orcidlinkm[1]{\@orcidlink{|}{#1}}
+
+%% Default to the small logo
+\DeclareRobustCommand\orcidlink\orcidlinks
+
+%% Scale the logo such that its font size matches lowercase letters of the surrounding text
+\DeclareRobustCommand\orcidlinkl[1]{%
+\texorpdfstring{%
+\setlength{\@curXheight}{\fontcharht\font`x}%
+\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
+\begin{tikzpicture}[yscale=-\@OrigInnerHeightRecip*\@curXheight,
+baseline=(base),
+xscale=\@OrigInnerHeightRecip*\@curXheight,transform shape]
+\pic{orcidlogo};
+\coordinate (base) at (0,186.2pt);
 \end{tikzpicture}%
 }}}}{}}
 
