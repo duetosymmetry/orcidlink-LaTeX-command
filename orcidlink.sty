@@ -49,19 +49,19 @@
 %% The original D spans from 79.1pt to 186.2pt; this macro holds 1/107.1.
 \newcommand{\@OrigInnerHeightRecip}{0.009337068160597572}
 
-\newlength{\@curXheight}
-\newlength{\@curXdepth}
+\newlength{\@TargetSize}
+\newlength{\@TargetDepth}
 
 %% Scale and center the logo around the given glyph
 \DeclareRobustCommand\@orcidlink[2]{%
 \texorpdfstring{%
-\setlength{\@curXheight}{\fontcharht\font`#1}%
-\setlength{\@curXdepth}{\fontchardp\font`#1}%
-\addtolength{\@curXheight}{\@curXdepth}%
+\setlength{\@TargetSize}{\fontcharht\font`#1}%
+\setlength{\@TargetDepth}{\fontchardp\font`#1}%
+\addtolength{\@TargetSize}{\@TargetDepth}%
 \href{https://orcid.org/#2}{\XeTeXLinkBox{\mbox{%
-\begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
-baseline=-\@curXheight+\@curXdepth,
-xscale=\@OrigHeightRecip*\@curXheight,transform shape]
+\begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@TargetSize,
+baseline=-\@TargetSize+\@TargetDepth,
+xscale=\@OrigHeightRecip*\@TargetSize,transform shape]
 \pic{orcidlogo};
 \end{tikzpicture}%
 }}}}{}}
@@ -75,11 +75,11 @@ xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 %% Scale the logo such that its font size matches lowercase letters of the surrounding text
 \DeclareRobustCommand\orcidlinkl[1]{%
 \texorpdfstring{%
-\setlength{\@curXheight}{\fontcharht\font`x}%
+\setlength{\@TargetSize}{\fontcharht\font`x}%
 \href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
-\begin{tikzpicture}[yscale=-\@OrigInnerHeightRecip*\@curXheight,
+\begin{tikzpicture}[yscale=-\@OrigInnerHeightRecip*\@TargetSize,
 baseline=(base),
-xscale=\@OrigInnerHeightRecip*\@curXheight,transform shape]
+xscale=\@OrigInnerHeightRecip*\@TargetSize,transform shape]
 \pic{orcidlogo};
 \coordinate (base) at (0,186.2pt);
 \end{tikzpicture}%
