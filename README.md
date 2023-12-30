@@ -30,8 +30,8 @@ When you want to insert the hyperlinked ORCiD logo, use `\orcidlink{0000-0000-00
 This will appear as a clickable hyperlink, and will look like this:
 ![Author LaTeX render preview image](https://raw.githubusercontent.com/duetosymmetry/orcidlink-LaTeX-command/f03c85cd9fe3e40bec5f51b1319b0e9ab30c2e09/preview.png)
 
-Dependancies
-------------
+Dependancies and Compatibility
+------------------------------
 
 This package relies on the following packages:
 - [hyperref](https://www.ctan.org/pkg/hyperref)
@@ -39,12 +39,16 @@ This package relies on the following packages:
 
 All of these packages are included in the popular [TeX Live](https://www.tug.org/texlive/) distribution, so most users should not have to install anything new.
 
+If you want to pass options to either of these packages, load them
+before you load `orcidlink`. Similarly, if you want to specify options
+to e.g. `xcolor`, load `xcolor` before loading `tikz` or `orcidlink`.
+
 Credits
 -------
 
 The original TikZ icon code was created by user [Milo on
 TeX.SE](https://tex.stackexchange.com/users/128068/milo).
 This package was created and is maintained by [Leo
-C. Stein](http://duetosymmetry.com/), (c) 2019.
+C. Stein](http://duetosymmetry.com/), (c) 2019-2023.
 This material is subject to the [LaTeX Project Public License
 1.3c](https://www.ctan.org/license/lppl1.3).
