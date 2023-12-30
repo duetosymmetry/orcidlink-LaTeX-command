@@ -20,7 +20,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
-    [2021/06/11 v1.0.4 Linked ORCiD logo macro package]
+    [2023/12/30 v1.0.5 Linked ORCiD logo macro package]
 
 %% All I did was package up Milo's code on TeX.SE,
 %% see https://tex.stackexchange.com/a/445583/34063
@@ -48,10 +48,17 @@
 %% We will compute the current X height to make the logo the right height
 \newlength{\@curXheight}
 
+%% Prevent externalization of the ORCiD logo.
+\newcommand{\@preventExternalization}{%
+\ifcsname tikz@library@external@loaded\endcsname%
+\tikzset{external/export next=false}\else\fi%
+}
+
 \DeclareRobustCommand\orcidlink[1]{%
 \texorpdfstring{%
 \setlength{\@curXheight}{\fontcharht\font`X}%
 \href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
+\@preventExternalization%
 \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
 xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
