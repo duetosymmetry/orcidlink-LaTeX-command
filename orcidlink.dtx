@@ -40,7 +40,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{41}
+% \CheckSum{61}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -69,6 +69,8 @@
 % working correctly with XeTeX.  Thanks to Tim Henke for the bug report.}
 % \changes{v1.0.5}{2023/12/30}{Turn off TikZ externalization of logos.
 % Thanks to github user aquileia for the bug report.}
+% \changes{v1.0.6}{2024/04/16}{Support ORCID's three different ID
+% formats.}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
@@ -77,6 +79,10 @@
 % \author{Leo C.\ Stein\,\orcidlink{0000-0001-7559-9597} \\ \href{mailto:leo.stein@gmail.com}{leo.stein@gmail.com}}
 % \date{\fileversion~from \filedate}
 %
+% \setlength{\marginparsep}{1em}
+% \setlength{\marginparpush}{.7ex}
+% \setlength{\parindent}{0em}
+% \setlength{\parskip}{2ex}
 % \maketitle
 %
 % \noindent Source repo:
@@ -85,7 +91,9 @@
 % \section{Introduction}
 %
 % This is a LaTeX style file to add a macro for inserting a linked
-% ORCiD logo.  The package provides exactly one command, |\orcidlink|.
+% ORCiD logo. The package provides three commands for ORCID's three
+% recommended ID printing formats, and a generic command |\orcidlink|
+% which takes an optional formatting argument.
 %
 % \section{Usage}
 %
@@ -94,24 +102,47 @@
 %    \usepackage{orcidlink}
 % \end{verbatim}
 %
-% \DescribeMacro{\orcidlink\marg{orcid}}
-% Insert the ORCiD logo (\orcidlink{}), which is hyperlinked to the URL
-% of the researcher whose iD was specified.
-% Replace the mandatory argument \meta{orcid} with your
-% ORCiD --- just the digits, not your whole URL.
-% For example, the command
-% |\orcidlink{0000-0001-7559-9597}| will hyperlink to the URL
-% \url{https://orcid.org/0000-0001-7559-9597}.
-% This is most common in
-% the author list.  For example, in the preamble of a RevTeX article,
-% if you write
-% \begin{verbatim}
-%    \author{Emmy Noether\,\orcidlink{0000-0000-0000-0000}}
-% \end{verbatim}
-% then the article byline will look something like this:
+% \DescribeMacro{\orcidlinkfull} \marg{orcid}
 %
-% \includegraphics[width=0.5\textwidth]{preview}\newline{}
-% The macro is used in the author line of this documentation as well.
+% Insert the ORCID ID \meta{orcid} in
+% \href{https://info.orcid.org/brand-guidelines/#h-full-orcid-id}{ORCID's
+% recommended `full' format}: the ORCID logo followed immediately by
+% the full URL of the researcher whose iD was specified. All elements
+% --- logo and URL are linked to the address. Replace the mandatory
+% argument \meta{orcid} with your ORCiD --- just the digits, not your
+% whole URL. For example, the command
+% |\orcidlinkfull{0000-0001-7559-9597}| will hyperlink to the URL
+% \url{https://orcid.org/0000-0001-7559-9597}, thus:
+%
+% \orcidlinkfull{0000-0001-7559-9597}
+%
+% \DescribeMacro{\orcidlinkcompact} \marg{orcid}
+%
+% Insert the ORCID ID \meta{orcid} in
+% \href{https://info.orcid.org/brand-guidelines/#h-compact-orcid-id}{ORCID's
+% `compact' format}: the ORCID logo followed immediately by the digits
+% of the ORCID ID. Both elements together link to the URL:
+% \orcidlinkcompact{0000-0001-7559-9597}.
+% 
+% \DescribeMacro{\orcidlinkinline} \oarg{name} \marg{orcid}
+%
+% Insert the name, phrase or sentence fragment \meta{name} and ORCID
+% ID \meta{orcid} in
+% \href{https://info.orcid.org/brand-guidelines/#h-inline-orcid-id}{ORCID's
+% `inline' format}: \meta{name} followed by the ORCID logo. Both
+% elements together link to the URL. \meta{name} is optional: if
+% specified, a thin space is added between it and the logo:
+% \orcidlinkinline[Leo C. Stein]{0000-0001-7559-9597},
+% though nothing is added if it is left empty:
+% \orcidlinkinline{0000-0001-7559-9597}.
+%
+% \DescribeMacro{\orcidlink} \oarg{format} \oarg{name}\marg{orcid}
+%
+% \meta{format} can be |full|, |compact| or |inline| and this command
+% will behave as the relevant above command. If left empty,
+% \meta{format} defaults to |inline|. If \meta{format} is |inline| (or
+% equivalently, if empty), \meta{name} is treated as in
+% |\orcidlinkinline|.
 %
 % \section{Package Compatibility}
 %
@@ -138,6 +169,7 @@
 %% see https://tex.stackexchange.com/a/445583/34063
 \RequirePackage{hyperref}
 \RequirePackage{tikz}
+\RequirePackage{xstring}
 
 \ProcessOptions\relax
 
@@ -166,20 +198,55 @@
 \tikzset{external/export next=false}\else\fi%
 }
 
+%% Helper for printing the ORCID logo
+\newcommand{\@orcidlogo}{%
+  \texorpdfstring{%
+    \setlength{\@curXheight}{\fontcharht\font`X}%
+    {\XeTeXLinkBox{\mbox{%
+          \@preventExternalization%
+          \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
+            xscale=\@OrigHeightRecip*\@curXheight,transform shape]
+            \pic{orcidlogo};
+          \end{tikzpicture}%
+        }}}}{}}
+
 %    \end{macrocode}
+%
+% \begin{macro}{\orcidlinkfull}
+%    \begin{macrocode}
+
+\DeclareDocumentCommand\orcidlinkfull{m}{%
+  \href{https://orcid.org/#1}{\@orcidlogo{} https://orcid.org/#1}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\orcidlinkcompact}
+%    \begin{macrocode}
+
+\DeclareDocumentCommand\orcidlinkcompact{m}{%
+  \href{https://orcid.org/#1}{\@orcidlogo{} #1}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\orcidlinkinline}
+%    \begin{macrocode}
+
+\DeclareDocumentCommand\orcidlinkinline{o m}{%
+  \href{https://orcid.org/#2}{\IfNoValueF{#1}{#1\,}\@orcidlogo{}}}
+
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\orcidlink}
 %    \begin{macrocode}
-\DeclareRobustCommand\orcidlink[1]{%
-\texorpdfstring{%
-\setlength{\@curXheight}{\fontcharht\font`X}%
-\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
-\@preventExternalization%
-\begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
-xscale=\@OrigHeightRecip*\@curXheight,transform shape]
-\pic{orcidlogo};
-\end{tikzpicture}%
-}}}}{}}
+
+\DeclareDocumentCommand\orcidlink{O{inline} o m}{%
+  \IfEqCase{#1}{%
+    {full}{\orcidlinkfull{#3}}%
+    {compact}{\orcidlinkcompact{#3}}%
+    {inline}{\orcidlinkinline[#2]{#3}}}}
 
 \endinput
 %    \end{macrocode}

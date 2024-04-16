@@ -26,6 +26,7 @@
 %% see https://tex.stackexchange.com/a/445583/34063
 \RequirePackage{hyperref}
 \RequirePackage{tikz}
+\RequirePackage{xstring}
 
 \ProcessOptions\relax
 
@@ -54,16 +55,36 @@
 \tikzset{external/export next=false}\else\fi%
 }
 
-\DeclareRobustCommand\orcidlink[1]{%
-\texorpdfstring{%
-\setlength{\@curXheight}{\fontcharht\font`X}%
-\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
-\@preventExternalization%
-\begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
-xscale=\@OrigHeightRecip*\@curXheight,transform shape]
-\pic{orcidlogo};
-\end{tikzpicture}%
-}}}}{}}
+%% Helper for printing the ORCID logo
+\newcommand{\@orcidlogo}{%
+  \texorpdfstring{%
+    \setlength{\@curXheight}{\fontcharht\font`X}%
+    {\XeTeXLinkBox{\mbox{%
+          \@preventExternalization%
+          \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
+            xscale=\@OrigHeightRecip*\@curXheight,transform shape]
+            \pic{orcidlogo};
+          \end{tikzpicture}%
+        }}}}{}}
+
+
+\DeclareDocumentCommand\orcidlinkfull{m}{%
+  \href{https://orcid.org/#1}{\@orcidlogo{} https://orcid.org/#1}}
+
+
+\DeclareDocumentCommand\orcidlinkcompact{m}{%
+  \href{https://orcid.org/#1}{\@orcidlogo{} #1}}
+
+
+\DeclareDocumentCommand\orcidlinkinline{o m}{%
+  \href{https://orcid.org/#2}{\IfNoValueF{#1}{#1\,}\@orcidlogo{}}}
+
+
+\DeclareDocumentCommand\orcidlink{O{inline} o m}{%
+  \IfEqCase{#1}{%
+    {full}{\orcidlinkfull{#3}}%
+    {compact}{\orcidlinkcompact{#3}}%
+    {inline}{\orcidlinkinline[#2]{#3}}}}
 
 \endinput
 %%
