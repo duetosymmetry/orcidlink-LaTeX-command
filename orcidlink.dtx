@@ -1,6 +1,6 @@
 % \iffalse meta-comment
 %
-% Copyright (C) 2019-2023 by Leo C. Stein <leo.stein@gmail.com>
+% Copyright (C) 2019-2024 by Leo C. Stein <leo.stein@gmail.com>
 % ---------------------------------------------------------------------------
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -27,9 +27,12 @@
 %<*driver>
 \documentclass{ltxdoc}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{orcidlink}[2023/12/30]
-\hypersetup{colorlinks,urlcolor=NavyBlue,citecolor=NavyBlue,linkcolor=NavyBlue,pdfusetitle}
+\usepackage{orcidlink}[2024/06/25]
+\hypersetup{colorlinks,urlcolor=NavyBlue,citecolor=NavyBlue,linkcolor=NavyBlue}
+\hypersetup{pdftitle={The orcidlink package},pdfauthor={Leo C. Stein},
+  pdfsubject={-}}
 \usepackage{graphicx}
+\usepackage{microtype}
 \EnableCrossrefs
 \CodelineIndex
 \RecordChanges
@@ -40,7 +43,7 @@
 %</driver>
 % \fi
 %
-% \CheckSum{41}
+% \CheckSum{59}
 %
 % \CharacterTable
 %  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -69,6 +72,8 @@
 % working correctly with XeTeX.  Thanks to Tim Henke for the bug report.}
 % \changes{v1.0.5}{2023/12/30}{Turn off TikZ externalization of logos.
 % Thanks to github user aquileia for the bug report.}
+% \changes{v1.1.0}{2024/06/25}{Support ORCID's three different ID
+% formats. Thanks to Hugo Heagren for suggestions.}
 %
 % \DoNotIndex{\newcommand,\newenvironment}
 %
@@ -84,8 +89,10 @@
 %
 % \section{Introduction}
 %
-% This is a LaTeX style file to add a macro for inserting a linked
-% ORCiD logo.  The package provides exactly one command, |\orcidlink|.
+% This is a LaTeX style file providing a macro for inserting a
+% hyperlinked ORCiD logo.  The package also provides three commands
+% for ORCiD's three recommended ID printing formats, and a command for
+% just the ORCiD logo, not linked to anything.
 %
 % \section{Usage}
 %
@@ -113,6 +120,36 @@
 % \includegraphics[width=0.5\textwidth]{preview}\newline{}
 % The macro is used in the author line of this documentation as well.
 %
+% \DescribeMacro{\orcidlogo}
+% If you simply want the ORCiD logo without a hyperlink anywhere, use
+% |\orcidlogo|.
+%
+% ORCiD's \href{https://info.orcid.org/brand-guidelines/}{guidelines}
+% recommend three formats: full, compact, and inline.  The three
+% formats are available:
+% \begin{enumerate}
+% \item \DescribeMacro{\orcidlinkf\marg{orcid}} Full format.  Example:
+% |\orcidlinkf{0000-0001-7559-9597}| will insert
+% \orcidlinkf{0000-0001-7559-9597}
+% \item \DescribeMacro{\orcidlinkc\marg{orcid}} Compact format.
+% Example: |\orcidlinkc{0000-0001-7559-9597}| will insert
+% \orcidlinkc{0000-0001-7559-9597}
+% \item \DescribeMacro{\orcidlinki\marg{Name}\marg{orcid}} Inline
+% format.  Example: |\orcidlinki{Leo C. Stein}{0000-0001-7559-9597}|
+% will insert \orcidlinki{Leo C. Stein}{0000-0001-7559-9597}
+% \end{enumerate}
+%
+% \DescribeMacro{\orcidlinkX\marg{before}\marg{orcid}\marg{after}}
+%
+% The command |\orcidlinkX{before}{orcid}{after}| is a helper macro
+% that's used to implement all of the others.  Though it is just an
+% internal helper, I saw no reason to keep it internal.
+% |\orcidlinkX{before}{orcid}{after}| results in
+% \orcidlinkX{before}{orcid}{after}.  The entire output is hyperlinked
+% to the ORCiD page.  There is a thin space |\,| between ``before,''
+% the logo, and ``after.''  However if ``before'' is empty, the space
+% will be omitted; similarly for ``after.''
+%
 % \section{Package Compatibility}
 %
 % This package relies on \texttt{hyperref} and \texttt{tikz}.  If you
@@ -132,10 +169,11 @@
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
-    [2023/12/30 v1.0.5 Linked ORCiD logo macro package]
+    [2024/06/26 v1.1.0 Support ORCID's three different ID formats.]
 
-%% All I did was package up Milo's code on TeX.SE,
-%% see https://tex.stackexchange.com/a/445583/34063
+%% This started out as Milo's code on TeX.SE,
+%% see https://tex.stackexchange.com/a/445583/34063.
+%% It has since been expanded with more commands.
 \RequirePackage{hyperref}
 \RequirePackage{tikz}
 
@@ -168,18 +206,45 @@
 
 %    \end{macrocode}
 %
-% \begin{macro}{\orcidlink}
+% \begin{macro}{\orcidlogo}
 %    \begin{macrocode}
-\DeclareRobustCommand\orcidlink[1]{%
+\newcommand{\orcidlogo}{%
 \texorpdfstring{%
 \setlength{\@curXheight}{\fontcharht\font`X}%
-\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
+\XeTeXLinkBox{%
 \@preventExternalization%
 \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
 xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
 \end{tikzpicture}%
-}}}}{}}
+}}{}}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\orcidlinkX}
+%    \begin{macrocode}
+\DeclareRobustCommand\orcidlinkX[3]{\href{https://orcid.org/#2}{%
+\ifstrempty{#1}{}{#1\,}\orcidlogo\ifstrempty{#3}{}{\,#3}}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\orcidlinkf}
+%    \begin{macrocode}
+\newcommand{\orcidlinkf}[1]{\orcidlinkX{}{#1}{https://orcid.org/#1}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\orcidlinkc}
+%    \begin{macrocode}
+\newcommand{\orcidlinkc}[1]{\orcidlinkX{}{#1}{#1}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\orcidlinki}
+%    \begin{macrocode}
+\newcommand{\orcidlinki}[2]{\orcidlinkX{#1}{#2}{}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\orcidlink}
+%    \begin{macrocode}
+\newcommand{\orcidlink}[1]{\orcidlinkX{}{#1}{}}
 
 \endinput
 %    \end{macrocode}

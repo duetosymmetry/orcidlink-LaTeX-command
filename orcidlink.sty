@@ -8,7 +8,7 @@
 %% 
 %% This is a generated file.
 %% 
-%% Copyright (C) 2019-2023 by Leo C. Stein <leo.stein@gmail.com>
+%% Copyright (C) 2019-2024 by Leo C. Stein <leo.stein@gmail.com>
 %% --------------------------------------------------------------------------
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3
@@ -20,10 +20,11 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{orcidlink}
-    [2023/12/30 v1.0.5 Linked ORCiD logo macro package]
+    [2024/06/26 v1.1.0 Support ORCID's three different ID formats.]
 
-%% All I did was package up Milo's code on TeX.SE,
-%% see https://tex.stackexchange.com/a/445583/34063
+%% This started out as Milo's code on TeX.SE,
+%% see https://tex.stackexchange.com/a/445583/34063.
+%% It has since been expanded with more commands.
 \RequirePackage{hyperref}
 \RequirePackage{tikz}
 
@@ -54,16 +55,23 @@
 \tikzset{external/export next=false}\else\fi%
 }
 
-\DeclareRobustCommand\orcidlink[1]{%
+\newcommand{\orcidlogo}{%
 \texorpdfstring{%
 \setlength{\@curXheight}{\fontcharht\font`X}%
-\href{https://orcid.org/#1}{\XeTeXLinkBox{\mbox{%
+\XeTeXLinkBox{%
 \@preventExternalization%
 \begin{tikzpicture}[yscale=-\@OrigHeightRecip*\@curXheight,
 xscale=\@OrigHeightRecip*\@curXheight,transform shape]
 \pic{orcidlogo};
 \end{tikzpicture}%
-}}}}{}}
+}}{}}
+
+\DeclareRobustCommand\orcidlinkX[3]{\href{https://orcid.org/#2}{%
+\ifstrempty{#1}{}{#1\,}\orcidlogo\ifstrempty{#3}{}{\,#3}}}
+\newcommand{\orcidlinkf}[1]{\orcidlinkX{}{#1}{https://orcid.org/#1}}
+\newcommand{\orcidlinkc}[1]{\orcidlinkX{}{#1}{#1}}
+\newcommand{\orcidlinki}[2]{\orcidlinkX{#1}{#2}{}}
+\newcommand{\orcidlink}[1]{\orcidlinkX{}{#1}{}}
 
 \endinput
 %%

@@ -1,7 +1,14 @@
 # orcidlink-LaTeX-command
 LaTeX style file to add a macro for inserting a linked ORCiD logo
 
-This LaTeX style file just defines a single macro, `\orcidlink`.  The code is from [this TeX.SE answer](https://tex.stackexchange.com/a/445583/34063).  My contribution was wrapping it into a style file (and improving the fragility of the command a bit).
+This LaTeX style file defines `\orcidlink` and a few related macros.
+The code is from [this TeX.SE
+answer](https://tex.stackexchange.com/a/445583/34063).  I wrapped it
+into a style file and improved the fragility of the command a bit.
+Later (at the suggestion of Hugo Heagren) we added the `\orcidlogo`
+command, and commands for the three recommended formats: full,
+compact, and inline, with commands `\orcidlinkf`, `\orcidlinkc`, and
+`\orcidlinki`.
 
 Installation
 ------------
@@ -30,6 +37,14 @@ When you want to insert the hyperlinked ORCiD logo, use `\orcidlink{0000-0000-00
 This will appear as a clickable hyperlink, and will look like this:
 ![Author LaTeX render preview image](https://raw.githubusercontent.com/duetosymmetry/orcidlink-LaTeX-command/f03c85cd9fe3e40bec5f51b1319b0e9ab30c2e09/preview.png)
 
+If you simply want the ORCiD logo without a hyperlink anywhere, use
+`\orcidlogo`.
+
+ORCiD’s [guidelines](https://info.orcid.org/brand-guidelines/)
+recommend three formats: full, compact, and inline. The three formats
+are available, through `\orcidlinkf{orcid}`, `\orcidlinkc{orcid}`, and
+`\orcidlinki{Name}{orcid}`.
+
 Dependancies and Compatibility
 ------------------------------
 
@@ -49,6 +64,6 @@ Credits
 The original TikZ icon code was created by user [Milo on
 TeX.SE](https://tex.stackexchange.com/users/128068/milo).
 This package was created and is maintained by [Leo
-C. Stein](http://duetosymmetry.com/), (c) 2019-2023.
+C. Stein](http://duetosymmetry.com/), (c) 2019-2024.
 This material is subject to the [LaTeX Project Public License
 1.3c](https://www.ctan.org/license/lppl1.3).
