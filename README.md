@@ -49,6 +49,8 @@ Dependancies and Compatibility
 ------------------------------
 
 This package relies on the following packages:
+- [etoolbox](https://ctan.org/pkg/etoolbox) (depending on hyperref>=2023-04-20
+  already relies on etoolbox)
 - [hyperref](https://www.ctan.org/pkg/hyperref)
 - [tikz](https://www.ctan.org/pkg/pgf)
 
