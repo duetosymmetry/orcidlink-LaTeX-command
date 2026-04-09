@@ -64,6 +64,6 @@ Credits
 The original TikZ icon code was created by user [Milo on
 TeX.SE](https://tex.stackexchange.com/users/128068/milo).
 This package was created and is maintained by [Leo
-C. Stein](http://duetosymmetry.com/), (c) 2019-2024.
+C. Stein](http://duetosymmetry.com/), (c) 2019-2026.
 This material is subject to the [LaTeX Project Public License
 1.3c](https://www.ctan.org/license/lppl1.3).
